@@ -2,7 +2,12 @@ from django.urls import path
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from users_service.views import CreateUserView, ManageUserView, UserListView, UserDetailView
+from users_service.views import (
+    CreateUserView,
+    ManageUserView,
+    UserListView,
+    UserDetailView,
+)
 
 app_name = "users"
 
@@ -14,4 +19,3 @@ urlpatterns = [
     path("", UserListView.as_view(), name="user_list"),
     path("<int:pk>/", UserDetailView.as_view(), name="user_detail"),
 ]
-

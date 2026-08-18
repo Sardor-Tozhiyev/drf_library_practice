@@ -2,7 +2,8 @@ from rest_framework import generics, permissions
 
 from users_service.serializers import (
     UserCreateSerializer,
-    UserSerializer, User,
+    UserSerializer,
+    User,
 )
 
 
@@ -17,6 +18,7 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()

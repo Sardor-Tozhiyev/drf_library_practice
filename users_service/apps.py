@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class UsersServiceConfig(AppConfig):
-    name = 'users_service'
+    name = "users_service"

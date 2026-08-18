@@ -6,7 +6,7 @@ from books_service.models import Book, Borrowing, Payment
 User = get_user_model()
 
 
-class BooksSerializer(serializers.ModelSerializer):
+class BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Book

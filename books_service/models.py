@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from drf_library_practice import settings
+
 
 class Book(models.Model):
 
@@ -41,7 +43,7 @@ class Borrowing(models.Model):
         related_name='borrowings'
     )
     user = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='borrowings'
     )

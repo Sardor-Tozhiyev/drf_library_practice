@@ -18,53 +18,6 @@ class BooksSerializer(serializers.ModelSerializer):
             "daily_fee"
         )
 
-class UserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = (
-            "id",
-            "username",
-            "email",
-            "first_name",
-            "last_name",
-        )
-        read_only_fields = ("id",)
-
-
-class UserCreateSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(
-        write_only=True,
-        min_length=8,
-    )
-    class Meta:
-        model = User
-        fields = (
-            "id",
-            "username",
-            "email",
-            "password",
-            "first_name",
-            "last_name",
-        )
-        read_only_fields = ("id")
-
-    def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
-
-
-class BorrowingSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Borrowing
-        fields = (
-            "borrowing_date",
-            "expected_return_date",
-            "actual_return_date",
-            "book",
-            "user",
-        )
-
 
 class PaymentSerializer(serializers.ModelSerializer):
 

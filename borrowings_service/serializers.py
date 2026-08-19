@@ -1,7 +1,8 @@
 from django.utils import timezone
 from rest_framework import serializers
 
-from books_service.models import Borrowing
+from books_service.serializers import BookSerializer
+from borrowings_service.models import Payment, Borrowing
 
 
 class BorrowingListSerializer(serializers.ModelSerializer):
@@ -22,7 +23,7 @@ class BorrowingListSerializer(serializers.ModelSerializer):
 
 class BorrowingDetailSerializer(serializers.ModelSerializer):
     book = BookSerializer(read_only=True)
-    user = serializers.Charfield(source="user.id", read_only=True)
+    user = serializers.CharField(source="user.id", read_only=True)
 
     class Meta:
         model = Borrowing
@@ -51,7 +52,7 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
         return book
 
     def create(self, validated_data):
-        book = validated_data.pop["book"]
+        book = validated_data.pop("book")
         book.inventory -= 1
         book.save(update_fields=["inventory"])
         validated_data["user"] = self.context["request"].user
@@ -67,7 +68,7 @@ class BorrowingReturnSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs):
-        if self.instance.actual_return_date is None:
+        if self.instance.actual_return_date is not None:
             raise serializers.ValidationError(
                 "This borrowing has already been returned."
             )
@@ -79,3 +80,16 @@ class BorrowingReturnSerializer(serializers.ModelSerializer):
         self.instance.book.save(update_fields=["inventory"])
         self.instance.save(update_fields=["actual_return_date"])
         return self.instance
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = (
+            "status",
+            "payment_type",
+            "borrowing",
+            "session_url",
+            "session_id",
+            "money_to_pay",
+        )

@@ -18,12 +18,38 @@ class Borrowing(models.Model):
     def clean(self):
         if (
             self.expected_return_date
-            and self.actual_return_date < timezone.now().date()
+            and self.expected_return_date < timezone.now().date()
         ):
             raise ValidationError("Expected return date cannot be in the past.")
 
     def __str__(self):
-        return f"{self.book.title} - {self.user.email} ({self.borrow_date})"
+        return f"{self.book.title} - {self.user.email} ({self.borrowing_date})"
 
     class Meta:
-        ordering = ["-borrow_date"]
+        ordering = ["-borrowing_date"]
+
+
+class Payment(models.Model):
+    class StatusChoices(models.TextChoices):
+        PENDING = "PENDING"
+        PAID = "PAID"
+
+    class TypeChoices(models.TextChoices):
+        PAYMENT = "PAYMENT"
+        FINE = "FINE"
+
+    status = models.CharField(
+        max_length=30,
+        choices=StatusChoices.choices,
+        default=StatusChoices.PENDING,
+    )
+    payment_type = models.CharField(
+        max_length=30,
+        choices=TypeChoices.choices,
+    )
+    borrowing = models.ForeignKey(
+        Borrowing, on_delete=models.PROTECT, related_name="payments"
+    )
+    session_url = models.URLField(max_length=500)
+    session_id = models.CharField(max_length=255)
+    money_to_pay = models.DecimalField(max_digits=10, decimal_places=2)

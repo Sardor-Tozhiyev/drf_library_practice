@@ -48,7 +48,9 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
 
     def validate_book(self, book):
         if book.inventory <= 0:
-            raise serializers.ValidationError("This book is currently out of stock.")
+            raise serializers.ValidationError(
+                "This book is currently out of stock."
+            )
         return book
 
     def create(self, validated_data):
@@ -59,11 +61,14 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
         validated_data["user"] = self.context["request"].user
         borrowing = super().create(validated_data)
 
-        from payments_service.models import Payment
-        from payments_service.services import create_payment_session
         from django_q.tasks import async_task
 
-        create_payment_session(borrowing, Payment.Type.PAYMENT, self.context["request"])
+        from payments_service.models import Payment
+        from payments_service.services import create_payment_session
+
+        create_payment_session(
+            borrowing, Payment.Type.PAYMENT, self.context["request"]
+        )
         async_task("notifications.services.notify_new_borrowing", borrowing.id)
 
         return borrowing
@@ -90,7 +95,10 @@ class BorrowingReturnSerializer(serializers.ModelSerializer):
         self.instance.book.save(update_fields=["inventory"])
         self.instance.save(update_fields=["actual_return_date"])
 
-        if self.instance.actual_return_date > self.instance.expected_return_date:
+        if (
+            self.instance.actual_return_date
+            > self.instance.expected_return_date
+        ):
             from payments_service.models import Payment
             from payments_service.services import create_payment_session
 

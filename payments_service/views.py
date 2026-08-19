@@ -34,10 +34,15 @@ class PaymentSuccessView(APIView):
                 {"detail": "Payment not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        if session.payment_status == "paid" and payment.status != Payment.Status.PAID:
+        if (
+            session.payment_status == "paid"
+            and payment.status != Payment.Status.PAID
+        ):
             payment.status = Payment.Status.PAID
             payment.save(update_fields=["status"])
-            async_task("notifications.services.notify_successful_payment", payment.id)
+            async_task(
+                "notifications.services.notify_successful_payment", payment.id
+            )
         return Response(
             {
                 "detail": (

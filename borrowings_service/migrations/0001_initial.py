@@ -9,7 +9,10 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("books_service", "0002_remove_payment_borrowing_remove_user_groups_and_more"),
+        (
+            "books_service",
+            "0002_remove_payment_borrowing_remove_user_groups_and_more",
+        ),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -28,7 +31,10 @@ class Migration(migrations.Migration):
                 ),
                 ("borrowing_date", models.DateField(auto_now_add=True)),
                 ("expected_return_date", models.DateField()),
-                ("actual_return_date", models.DateField(blank=True, null=True)),
+                (
+                    "actual_return_date",
+                    models.DateField(blank=True, null=True),
+                ),
                 (
                     "book",
                     models.ForeignKey(
@@ -79,7 +85,10 @@ class Migration(migrations.Migration):
                 ),
                 ("session_url", models.URLField(max_length=500)),
                 ("session_id", models.CharField(max_length=255)),
-                ("money_to_pay", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "money_to_pay",
+                    models.DecimalField(decimal_places=2, max_digits=10),
+                ),
                 (
                     "borrowing",
                     models.ForeignKey(

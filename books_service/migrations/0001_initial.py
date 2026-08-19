@@ -32,11 +32,15 @@ class Migration(migrations.Migration):
                 (
                     "cover",
                     models.CharField(
-                        choices=[("HARD", "Hard"), ("SOFT", "Soft")], max_length=100
+                        choices=[("HARD", "Hard"), ("SOFT", "Soft")],
+                        max_length=100,
                     ),
                 ),
                 ("inventory", models.PositiveIntegerField()),
-                ("daily_fee", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "daily_fee",
+                    models.DecimalField(decimal_places=2, max_digits=10),
+                ),
             ],
             options={
                 "ordering": ["title", "inventory"],
@@ -54,7 +58,10 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("password", models.CharField(max_length=128, verbose_name="password")),
+                (
+                    "password",
+                    models.CharField(max_length=128, verbose_name="password"),
+                ),
                 (
                     "last_login",
                     models.DateTimeField(
@@ -100,7 +107,8 @@ class Migration(migrations.Migration):
                 (
                     "date_joined",
                     models.DateTimeField(
-                        default=django.utils.timezone.now, verbose_name="date joined"
+                        default=django.utils.timezone.now,
+                        verbose_name="date joined",
                     ),
                 ),
                 ("email", models.EmailField(max_length=254, unique=True)),
@@ -151,7 +159,10 @@ class Migration(migrations.Migration):
                 ),
                 ("borrowing_date", models.DateField()),
                 ("expected_return_date", models.DateField()),
-                ("actual_return_date", models.DateField(blank=True, null=True)),
+                (
+                    "actual_return_date",
+                    models.DateField(blank=True, null=True),
+                ),
                 (
                     "book",
                     models.ForeignKey(
@@ -202,7 +213,10 @@ class Migration(migrations.Migration):
                 ),
                 ("session_url", models.URLField(max_length=500)),
                 ("session_id", models.CharField(max_length=255)),
-                ("money_to_pay", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "money_to_pay",
+                    models.DecimalField(decimal_places=2, max_digits=10),
+                ),
                 (
                     "borrowing",
                     models.ForeignKey(

@@ -6,7 +6,9 @@ from notifications.services import notify_overdue_borrowing
 
 
 class Command(BaseCommand):
-    help = "Finds overdue borrowings and sends Telegram notifications about them"
+    help = (
+        "Finds overdue borrowings and sends Telegram notifications about them"
+    )
 
     def handle(self, *args, **options):
         today = timezone.now().date()
@@ -21,5 +23,7 @@ class Command(BaseCommand):
             notify_overdue_borrowing(borrowing.id)
 
         self.stdout.write(
-            self.style.SUCCESS(f"Checked overdue borrowings. Notified: {count}")
+            self.style.SUCCESS(
+                f"Checked overdue borrowings. Notified: {count}"
+            )
         )

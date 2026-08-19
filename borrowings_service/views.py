@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from borrowings_service.models import Borrowing
 from borrowings_service.serializers import (
     BorrowingCreateSerializer,
+    BorrowingDetailSerializer,
     BorrowingListSerializer,
     BorrowingReturnSerializer,
-    BorrowingDetailSerializer,
 )
 
 

@@ -42,7 +42,10 @@ class Migration(migrations.Migration):
                 ),
                 ("session_url", models.URLField(max_length=1024)),
                 ("session_id", models.CharField(max_length=255)),
-                ("money_to_pay", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "money_to_pay",
+                    models.DecimalField(decimal_places=2, max_digits=10),
+                ),
                 (
                     "borrowing",
                     models.ForeignKey(

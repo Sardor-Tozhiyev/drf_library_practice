@@ -49,7 +49,9 @@ def notify_overdue_borrowing(borrowing_id: int) -> None:
         logger.error("Borrowing %s not found for notification", borrowing_id)
         return
 
-    days_overdue = (timezone.now().date() - borrowing.expected_return_date).days
+    days_overdue = (
+        timezone.now().date() - borrowing.expected_return_date
+    ).days
     text = (
         "⚠️ <b>Прострочене повернення</b>\n"
         f"Книга: {borrowing.book.title}\n"

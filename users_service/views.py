@@ -1,9 +1,9 @@
 from rest_framework import generics, permissions
 
 from users_service.serializers import (
+    User,
     UserCreateSerializer,
     UserSerializer,
-    User,
 )
 
 

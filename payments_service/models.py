@@ -13,7 +13,9 @@ class Payment(models.Model):
     status = models.CharField(
         max_length=10, choices=Status.choices, default=Status.PENDING
     )
-    type = models.CharField(max_length=10, choices=Type.choices, default=Type.PAYMENT)
+    type = models.CharField(
+        max_length=10, choices=Type.choices, default=Type.PAYMENT
+    )
     borrowing = models.ForeignKey(
         "borrowings_service.Borrowing",
         on_delete=models.CASCADE,

@@ -6,7 +6,6 @@ from django.urls import reverse
 
 from .models import Payment
 
-
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 FINE_MULTIPLIER = Decimal("2.0")
@@ -19,7 +18,9 @@ def calculate_payment_amount(borrowing) -> Decimal:
 
 
 def calculate_fine_amount(borrowing) -> Decimal:
-    overdue_days = (borrowing.actual_return_date - borrowing.expected_return_date).days
+    overdue_days = (
+        borrowing.actual_return_date - borrowing.expected_return_date
+    ).days
     overdue_days = max(overdue_days, 0)
     return borrowing.book.daily_fee * overdue_days * FINE_MULTIPLIER
 

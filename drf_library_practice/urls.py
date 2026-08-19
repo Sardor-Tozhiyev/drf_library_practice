@@ -16,7 +16,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -26,5 +26,8 @@ urlpatterns = [
         "borrowings/",
         include("borrowings_service.urls", namespace="borrowings_service"),
     ),
-    path("payments/", include("payments_service.urls", namespace="payments_service")),
+    path(
+        "payments/",
+        include("payments_service.urls", namespace="payments_service"),
+    ),
 ]

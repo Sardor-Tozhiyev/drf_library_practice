@@ -9,21 +9,24 @@ https://docs.djangoproject.com/en/6.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
-
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-7p2*bmkqqykv$8tpo6it6r$s8y+r43ia6b5lf@lx98%!2wpx&r"
+SECRET_KEY = os.environ.get("SECRET_KEY")
+DEBUG = os.environ.get("DEBUG")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -40,9 +43,11 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework.authtoken",
+    "django_q",
     "books_service",
     "borrowings_service",
     "users_service",
+    "notifications",
 ]
 
 MIDDLEWARE = [
@@ -139,3 +144,17 @@ REST_FRAMEWORK = {
 }
 
 AUTH_USER_MODEL = "users_service.User"
+
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
+
+Q_CLUSTER = {
+    "name": "library_q",
+    "workers": 2,
+    "timeout": 60,
+    "retry": 90,
+    "queue_limit": 50,
+    "bulk": 10,
+    "orm": "default",
+}
+

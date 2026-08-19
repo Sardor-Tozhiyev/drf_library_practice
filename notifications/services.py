@@ -32,7 +32,7 @@ def notify_new_borrowing(borrowing_id: int) -> None:
         "📚 <b>Нове бронювання</b>\n"
         f"Книга: {borrowing.book.title}\n"
         f"Користувач: {borrowing.user.email}\n"
-        f"Дата видачі: {borrowing.borrow_date}\n"
+        f"Дата видачі: {borrowing.borrowing_date}\n"
         f"Очікувана дата повернення: {borrowing.expected_return_date}"
     )
     _log_and_send(NotificationLog.NotificationType.NEW_BORROWING, text)

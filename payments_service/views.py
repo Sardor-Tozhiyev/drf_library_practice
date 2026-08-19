@@ -10,10 +10,11 @@ from payments_service.models import Payment
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+
 class PaymentSuccessView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self,request):
+    def get(self, request):
         session_id = request.query_params.get("session_id")
         if not session_id:
             return Response(
@@ -52,7 +53,7 @@ class PaymentSuccessView(APIView):
 class PaymentCancelView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self,request):
+    def get(self, request):
         return Response(
             {
                 "detail": (

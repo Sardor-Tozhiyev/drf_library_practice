@@ -2,7 +2,7 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from books_service.serializers import BookSerializer
-from borrowings_service.models import Payment, Borrowing
+from borrowings_service.models import Borrowing
 
 
 class BorrowingListSerializer(serializers.ModelSerializer):
@@ -52,11 +52,21 @@ class BorrowingCreateSerializer(serializers.ModelSerializer):
         return book
 
     def create(self, validated_data):
-        book = validated_data.pop("book")
+        book = validated_data["book"]
         book.inventory -= 1
         book.save(update_fields=["inventory"])
+
         validated_data["user"] = self.context["request"].user
-        return super().create(validated_data)
+        borrowing = super().create(validated_data)
+
+        from payments_service.models import Payment
+        from payments_service.services import create_payment_session
+        from django_q.tasks import async_task
+
+        create_payment_session(borrowing, Payment.Type.PAYMENT, self.context["request"])
+        async_task("notifications.services.notify_new_borrowing", borrowing.id)
+
+        return borrowing
 
 
 class BorrowingReturnSerializer(serializers.ModelSerializer):
@@ -79,4 +89,13 @@ class BorrowingReturnSerializer(serializers.ModelSerializer):
         self.instance.book.inventory += 1
         self.instance.book.save(update_fields=["inventory"])
         self.instance.save(update_fields=["actual_return_date"])
+
+        if self.instance.actual_return_date > self.instance.expected_return_date:
+            from payments_service.models import Payment
+            from payments_service.services import create_payment_session
+
+            create_payment_session(
+                self.instance, Payment.Type.FINE, self.context["request"]
+            )
+
         return self.instance

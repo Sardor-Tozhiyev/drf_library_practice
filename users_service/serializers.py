@@ -23,6 +23,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         write_only=True,
         min_length=8,
         required=False,
+        style={"input_type": "password"},
     )
 
     class Meta:

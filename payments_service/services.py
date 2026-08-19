@@ -11,8 +11,9 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 FINE_MULTIPLIER = Decimal("2.0")
 
+
 def calculate_payment_amount(borrowing) -> Decimal:
-    days = (borrowing.expected_return_date - borrowing.borrow_date).days
+    days = (borrowing.expected_return_date - borrowing.borrowing_date).days
     days = max(days, 1)
     return borrowing.book.daily_fee * days
 
@@ -21,6 +22,7 @@ def calculate_fine_amount(borrowing) -> Decimal:
     overdue_days = (borrowing.actual_return_date - borrowing.expected_return_date).days
     overdue_days = max(overdue_days, 0)
     return borrowing.book.daily_fee * overdue_days * FINE_MULTIPLIER
+
 
 def create_payment_session(borrowing, payment_type: str, request) -> Payment:
     if payment_type == Payment.Type.FINE:
@@ -31,8 +33,8 @@ def create_payment_session(borrowing, payment_type: str, request) -> Payment:
     amount_cents = int(amount * 100)
 
     success_url = (
-            request.build_absolute_uri(reverse("payments_service:success"))
-            + "?session_id={CHECKOUT_SESSION_ID}"
+        request.build_absolute_uri(reverse("payments_service:success"))
+        + "?session_id={CHECKOUT_SESSION_ID}"
     )
     cancel_url = request.build_absolute_uri(reverse("payments_service:cancel"))
 

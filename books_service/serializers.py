@@ -1,44 +1,15 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from books_service.models import Book, Borrowing, Payment
+from books_service.models import Book, Payment
 
 User = get_user_model()
 
 
 class BookSerializer(serializers.ModelSerializer):
-class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ("title", "author", "cover", "inventory", "daily_fee")
-        model = User
-        fields = (
-            "id",
-            "username",
-            "email",
-            "first_name",
-            "last_name",
-        )
-        read_only_fields = ("id",)
-
-
-class UserCreateSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(
-        write_only=True,
-        min_length=8,
-    )
-
-    class Meta:
-        model = User
-        fields = (
-            "id",
-            "username",
-            "email",
-            "password",
-            "first_name",
-            "last_name",
-        )
-        read_only_fields = "id"
 
 
 class PaymentSerializer(serializers.ModelSerializer):

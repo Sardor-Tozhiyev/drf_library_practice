@@ -5,7 +5,6 @@ from borrowings_service.models import Borrowing
 
 
 class Book(models.Model):
-
     class CoverChoices(models.TextChoices):
         HARD = "HARD"
         SOFT = "SOFT"
@@ -25,6 +24,7 @@ class Book(models.Model):
     class Meta:
         ordering = ["title", "inventory"]
 
+
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=100, unique=True)
@@ -37,16 +37,8 @@ class Borrowing(models.Model):
     borrowing_date = models.DateField()
     expected_return_date = models.DateField()
     actual_return_date = models.DateField(null=True, blank=True)
-    book = models.ForeignKey(
-        Book,
-        on_delete=models.CASCADE,
-        related_name='borrowings'
-    )
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='borrowings'
-    )
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="borrowings")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="borrowings")
 
     def __str__(self):
         return f"{self.borrowing_date} ({self.book} - {self.user})"
@@ -56,7 +48,6 @@ class Borrowing(models.Model):
 
 
 class Payment(models.Model):
-
     class StatusChoices(models.TextChoices):
         PENDING = "PENDING"
         PAID = "PAID"
@@ -75,9 +66,7 @@ class Payment(models.Model):
         choices=TypeChoices.choices,
     )
     borrowing = models.ForeignKey(
-        Borrowing,
-        on_delete=models.PROTECT,
-        related_name='payments'
+        Borrowing, on_delete=models.PROTECT, related_name="payments"
     )
     session_url = models.URLField(max_length=500)
     session_id = models.CharField(max_length=255)

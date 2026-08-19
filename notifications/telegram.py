@@ -9,6 +9,10 @@ TELEGRAM_API_URL = "https://api.telegram.org/bot{token}/sendMessage"
 
 
 def send_telegram_message(text: str) -> bool:
+    if not settings.TELEGRAM_BOT_TOKEN or not settings.TELEGRAM_CHAT_ID:
+        logger.error("Telegram bot credentials are not configured")
+        return False
+
     url = TELEGRAM_API_URL.format(token=settings.TELEGRAM_BOT_TOKEN)
     payload = {
         "chat_id": settings.TELEGRAM_CHAT_ID,

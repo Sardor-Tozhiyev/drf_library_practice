@@ -80,16 +80,3 @@ class BorrowingReturnSerializer(serializers.ModelSerializer):
         self.instance.book.save(update_fields=["inventory"])
         self.instance.save(update_fields=["actual_return_date"])
         return self.instance
-
-
-class PaymentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Payment
-        fields = (
-            "status",
-            "payment_type",
-            "borrowing",
-            "session_url",
-            "session_id",
-            "money_to_pay",
-        )

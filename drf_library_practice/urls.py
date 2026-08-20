@@ -25,22 +25,22 @@ from rest_framework.permissions import AllowAny
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("books/", include("books_service.urls", namespace="books_service")),
-    path("users/", include("users_service.urls", namespace="users")),
+    path("api/books/", include("books_service.urls", namespace="books_service")),
+    path("api/users/", include("users_service.urls", namespace="users")),
     path(
-        "borrowings/",
+        "api/borrowings/",
         include("borrowings_service.urls", namespace="borrowings_service"),
     ),
     path(
-        "payments/",
+        "api/payments/",
         include("payments_service.urls", namespace="payments_service"),
     ),
-    path("schema/",
+    path("api/schema/",
          SpectacularAPIView.as_view(
              permission_classes=[AllowAny],
          ), name="schema"),
     path(
-        "docs/",
+        "api/docs/",
         SpectacularSwaggerView.as_view(
             url_name="schema",
             permission_classes=[AllowAny],

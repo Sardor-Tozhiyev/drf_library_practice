@@ -1,4 +1,5 @@
 from django.db import transaction
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
@@ -13,6 +14,19 @@ from borrowings_service.serializers import (
 
 class BorrowingListCreateView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
+
+    @extend_schema(
+        responses=BorrowingListSerializer(many=True),
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @extend_schema(
+        request=BorrowingCreateSerializer,
+        responses=BorrowingCreateSerializer,
+    )
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
 
     def get_queryset(self):
         queryset = Borrowing.objects.select_related("book", "user")
@@ -67,6 +81,10 @@ class BorrowingReturnView(generics.UpdateAPIView):
             queryset = queryset.filter(user=self.request.user)
         return queryset
 
+    @extend_schema(
+        request=None,
+        responses=BorrowingReturnSerializer,
+    )
     def post(self, request, *args, **kwargs):
         with transaction.atomic():
             instance = self.get_object()

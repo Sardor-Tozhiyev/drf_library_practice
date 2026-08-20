@@ -1,6 +1,7 @@
 import stripe
 from django.conf import settings
 from django_q.tasks import async_task
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -14,6 +15,16 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 class PaymentSuccessView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="session_id",
+                type=str,
+                required=True,
+                location=OpenApiParameter.QUERY,
+            ),
+        ],
+    )
     def get(self, request):
         session_id = request.query_params.get("session_id")
         if not session_id:

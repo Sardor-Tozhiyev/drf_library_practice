@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.test import APITestCase
 
 from books_service.models import Book
@@ -125,5 +126,5 @@ class BorrowingModelTests(APITestCase):
             book=book,
             user=user,
         )
-        with self.assertRaises(Exception):
+        with self.assertRaises(ValidationError):
             borrowing.clean()

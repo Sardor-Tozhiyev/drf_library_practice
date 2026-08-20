@@ -166,15 +166,23 @@ SIMPLE_JWT = {
 
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "drf_library_practice",
-    "DESCRIPTION": "API for managing books, borrowings, payments, notifications.",
+    "TITLE": "Library API",
+    "DESCRIPTION": "API documentation for the Library service",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
-    "SWAGGER_UI_SETTINGS": {
-        "deepLinking": True,
-        "defaultModelRendering": "model",
-        "defaultModelsExpandDepth": 2,
-        "defaultModelExpandDepth": 2,
+    "SECURITY": [
+        {
+            "BearerAuth": [],
+        }
+    ],
+    "COMPONENTS": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+            }
+        }
     },
 }
 

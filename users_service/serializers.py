@@ -9,7 +9,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             "id",
-            "username",
             "email",
             "first_name",
             "last_name",
@@ -21,7 +20,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
         min_length=8,
-        required=False,
         style={"input_type": "password"},
     )
 
@@ -29,7 +27,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             "id",
-            "username",
             "email",
             "password",
             "first_name",

@@ -13,17 +13,28 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         today = timezone.now().date()
 
-        overdue_borrowings = Borrowing.objects.filter(
-            expected_return_date__lt=today,
-            actual_return_date__isnull=True,
+        overdue_borrowings = list(
+            Borrowing.objects.filter(
+                expected_return_date__lt=today,
+                actual_return_date__isnull=True,
+            ).select_related("user", "book")
         )
 
-        count = overdue_borrowings.count()
+        sent = 0
         for borrowing in overdue_borrowings:
-            notify_overdue_borrowing(borrowing.id)
+            try:
+                notify_overdue_borrowing(borrowing.id)
+                sent += 1
+            except Exception as e: # noqa: BLE001
+                self.stderr.write(
+                    self.style.ERROR(
+                        f"Failed to notify for borrowing {borrowing.id}: {e}"
+                    )
+                )
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"Checked overdue borrowings. Notified: {count}"
+                f"Checked overdue borrowings. Found: {len(overdue_borrowings)}, "
+                f"Notified: {sent}"
             )
         )

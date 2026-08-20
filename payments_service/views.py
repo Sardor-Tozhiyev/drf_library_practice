@@ -28,7 +28,11 @@ class PaymentSuccessView(APIView):
                 {"detail": str(exc)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        payment = Payment.objects.filter(session_id=session_id).first()
+        payment = Payment.objects.filter(
+            session_id=session_id,
+            borrowing__user=request.user,
+        ).first()
+        
         if payment is None:
             return Response(
                 {"detail": "Payment not found."},

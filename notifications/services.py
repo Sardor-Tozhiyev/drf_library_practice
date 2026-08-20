@@ -63,7 +63,6 @@ def notify_overdue_borrowing(borrowing_id: int) -> None:
 
 
 def notify_successful_payment(payment_id: int) -> None:
-    """Викликається з payments/views.py після підтвердження оплати Stripe."""
     from payments_service.models import Payment
 
     try:
